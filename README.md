@@ -1,43 +1,29 @@
-# Xmip repository template — Rust
+# xmip-core-library-file
 
-This repository is the starter snapshot for a Rust Xmip module repository. It is
-not an Xmip runtime capability.
+File system acts every layer shares, one copy of each. A Library: below
+every other layer, depending on nothing of the estate's (ADR-0058).
 
-For a .NET 11 surface — the PowerShell module, the MAUI desktop GUI or the
-Blazor web GUI — use
-[xmip-template-dotnet](https://github.com/IlleNilsson/xmip-template-dotnet)
-instead. ADR-0014: those surfaces are .NET 11 over the C ABI; the command
-line is Rust, on the runtime's traits (amendments 2026-10-12 and
-2026-11-17).
+- **A directory synced, `synced::directory`.** The names in a directory on
+  disk as they are now, so a file renamed or linked into it outlives a
+  crash under its new name, never the one it had before or none. Unix
+  syncs the directory opened to read (`fsync`); Windows flushes a handle to
+  it opened for writing with `FILE_FLAG_BACKUP_SEMANTICS`
+  (`FlushFileBuffers`). Called by the file transport's send and by the
+  archive's `whole`, which the file and Parquet archives write with; each
+  caller waits on it through `xcore::spent::on_sync`, the disk's time and
+  never Xmip's own share (ADR-0018, amendment 2026-11-09).
 
-A repository generated from this template has independent history. Later
-template changes do not automatically rewrite generated repositories.
-
-## Before implementation
-
-Follow [TEMPLATE_SETUP.md](TEMPLATE_SETUP.md), and item 3 first. The new
-repository must be classified and declared in the authoritative Xmip
-architecture manifest before its responsibility or dependencies are treated as
-accepted architecture.
-
-## Toolchain
-
-`rust-toolchain.toml` pins the toolchain for the whole estate. rustup reads it
-automatically and installs what is missing. Do not change it here — raising it
-is one deliberate change across every repository.
-
-## Shared governance
-
-Repository-specific licensing remains explicit in [LICENSE](LICENSE).
-Contribution, security, support, issue and pull-request defaults are inherited
-from [IlleNilsson/.github](https://github.com/IlleNilsson/.github) when they are
-not overridden locally.
+Here since 2026-11-19: written once in the file transport, moved to
+`xmip-core` for the archive the same day, and moved here because a
+Foundation crate opens no file (ADR-0058 clause 1; ADR-0044, amendment
+2026-11-19).
 
 ## Verification
 
-The included workflow is manual-only and calls the versioned shared workflow at
-`IlleNilsson/.github@v1`. It does not run on pushes, pull requests or a
-schedule.
+```powershell
+cargo fmt --check
+cargo clippy --all-targets -- -D warnings
+cargo test
+```
 
-The ordered stages are formatting, semantic analysis, linting, compilation and
-linking, and test execution. Packaging and publishing are not configured.
+Licensed under the AGPL-3.0-or-later; see `LICENSE`.
