@@ -13,6 +13,21 @@ publish = false
 [lib]
 path = "src/lib.rs"
 
+[features]
+# A test's own temporary folder (`temporary.rs`), for the tests of every
+# crate that takes this one with it from its dev-dependencies: never in a
+# node.
+test-support = ["dep:uuid"]
+
+[dependencies]
+# The random part of a test folder's name, a UUIDv7 (`temporary.rs`), as
+# xmip-core names its identifiers: under `test-support` alone.
+uuid = { version = "1", features = ["v7"], optional = true }
+
+[dev-dependencies]
+# This crate's own tests make their folder with `temporary.rs` too.
+uuid = { version = "1", features = ["v7"] }
+
 [lints.rust]
 # forbid, not deny: a library opening files through the standard library has
 # no business writing unsafe.
