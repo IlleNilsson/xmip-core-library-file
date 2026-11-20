@@ -7,7 +7,7 @@ version = "0.1.0"
 edition = "2024"
 license = "AGPL-3.0-or-later"
 repository = "https://github.com/IlleNilsson/xmip-core-library-file"
-description = "File system acts every layer shares, one copy of each: a directory synced to its device, so a name made, renamed or removed in it outlives a crash (fsync of the directory on Unix; FlushFileBuffers on a handle opened with FILE_FLAG_BACKUP_SEMANTICS on Windows)."
+description = "File system acts every layer shares, one copy of each: a directory synced to its device, so a name made, renamed or removed in it outlives a crash; and a file held by its writer while it is open (flock on Unix, sharing that refuses its removal on Windows), so a removal takes only a file no live process writes."
 publish = false
 
 [lib]
