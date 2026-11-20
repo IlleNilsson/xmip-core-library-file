@@ -9,6 +9,11 @@
 //! the archive both reach it (ADR-0044, amendments 2026-11-19 and
 //! 2026-11-20).
 
+/// What cargo built for a test program, found above it wherever the build
+/// directory is: the one way a test finds a library it loads, under
+/// `test-support`.
+#[cfg(any(test, feature = "test-support"))]
+pub mod built;
 /// A file in its writer's hands while it is written, and a file no process
 /// holds removed: what a writer that links a file into place writes with.
 pub mod held;
