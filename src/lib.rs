@@ -9,3 +9,7 @@
 /// A directory's names on disk as they are now, once for every writer that
 /// renames or links a file into place.
 pub mod synced;
+/// A folder of a test's own, removed when dropped: the one way a test makes
+/// one, under `test-support`.
+#[cfg(any(test, feature = "test-support"))]
+pub mod temporary;

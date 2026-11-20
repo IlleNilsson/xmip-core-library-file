@@ -48,26 +48,13 @@ pub fn directory(path: &Path) -> io::Result<()> {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use std::fs;
-    use std::path::PathBuf;
-
-    /// A scratch directory of its own, removed when dropped, also when the
-    /// test fails.
-    struct Scratch(PathBuf);
-
-    impl Drop for Scratch {
-        fn drop(&mut self) {
-            let _ = fs::remove_dir_all(&self.0);
-        }
-    }
+    use crate::temporary::Folder;
 
     #[test]
     fn the_directory_a_file_is_in_is_synced() {
-        let made = std::env::temp_dir().join(std::format!("xmip-synced-{}", std::process::id()));
-        fs::create_dir_all(&made).expect("the scratch directory");
-        let dir = Scratch(made);
-        directory(&dir.0.join("order.edi")).expect("the directory synced");
-        let missing = directory(&dir.0.join("gone").join("order.edi"));
+        let folder = Folder::new("synced");
+        directory(&folder.join("order.edi")).expect("the directory synced");
+        let missing = directory(&folder.join("gone").join("order.edi"));
         assert!(missing.is_err(), "a directory not there is not synced");
     }
 }
