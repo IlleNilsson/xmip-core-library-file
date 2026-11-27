@@ -1,11 +1,11 @@
 [package]
 name = "xmip-core-library-file"
-version = "0.1.0"
-edition = "2024"
-license = "AGPL-3.0-or-later"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
 repository = "https://github.com/IlleNilsson/xmip-core-library-file"
 description = "File system acts every layer shares, one copy of each: a directory synced to its device, so a name made, renamed or removed in it outlives a crash; and a file held by its writer while it is open (flock on Unix, sharing that refuses its removal on Windows), so a removal takes only a file no live process writes."
-publish = false
+publish.workspace = true
 
 [lib]
 path = "src/lib.rs"
@@ -25,18 +25,5 @@ uuid = { version = "1", features = ["v7"], optional = true }
 # This crate's own tests make their folder with `temporary.rs` too.
 uuid = { version = "1", features = ["v7"] }
 
-[lints.rust]
-# forbid, not deny: a library opening files through the standard library has
-# no business writing unsafe.
-unsafe_code = "forbid"
-
-[lints.clippy]
-# Warned, never denied. doc/governance/rust-style.md section 3.
-too_many_lines = "warn"
-
-# The ones that catch real defects rather than taste.
-pedantic = { level = "warn", priority = -1 }
-missing_errors_doc = "warn"
-missing_panics_doc = "warn"
-unwrap_used = "warn"
-expect_used = "allow"
+[lints]
+workspace = true
